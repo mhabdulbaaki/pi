@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
-
 void main() => runApp(MyAppBody());
 
 class MyAppBody extends StatefulWidget {
@@ -11,13 +10,12 @@ class MyAppBody extends StatefulWidget {
 }
 
 class _MyAppBodyState extends State<MyAppBody> {
-
   void onAlertButtonPressed(context) {
     Alert(
       context: context,
       type: AlertType.error,
-      title: "Finish",
-      desc: "Questions exhausted",
+      title: "Oops ): out of range",
+      desc: "Limit is 160",
       buttons: [
         DialogButton(
           child: Text(
@@ -30,7 +28,6 @@ class _MyAppBodyState extends State<MyAppBody> {
       ],
     ).show();
   }
-
 
   final TextEditingController piHolder = TextEditingController(text: '3');
   static String myPI =
@@ -102,7 +99,7 @@ class _MyAppBodyState extends State<MyAppBody> {
                       onPressed: () {
                         setState(() {
                           numberOfDecimal = int.parse(piHolder.text);
-                          if(numberOfDecimal > myPI.length ){
+                          if (numberOfDecimal > myPI.length) {
                             onAlertButtonPressed(context);
                           }
                           piSubString = myPI.substring(2, 2 + numberOfDecimal);
