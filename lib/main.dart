@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'pi_data.dart';
 
 void main() => runApp(MyAppBody());
 
@@ -10,32 +11,15 @@ class MyAppBody extends StatefulWidget {
 }
 
 class _MyAppBodyState extends State<MyAppBody> {
-  void onAlertButtonPressed(context) {
-    Alert(
-      context: context,
-      type: AlertType.error,
-      title: "Oops ): out of range",
-      desc: "Limit is 160",
-      buttons: [
-        DialogButton(
-          child: Text(
-            "Cancel",
-            style: TextStyle(color: Colors.white, fontSize: 20),
-          ),
-          onPressed: () => Navigator.pop(context),
-          width: 120,
-        )
-      ],
-    ).show();
+  onPressedButton(context) {
+    Alert(context: context, title: "Oops ):", desc: "limit is 160").show();
   }
 
+  static PiData piData = PiData();
   final TextEditingController piHolder = TextEditingController(text: '3');
-  static String myPI =
-      '''3.14159265358979323846264338327950288419716939937510582097494459230781640628620
-  89986280348253421170679821480865132823066470938446095505822317253594081284811174''';
-
   static int numberOfDecimal = 3;
-  String piSubString = myPI.substring(2, 5);
+  String piSubString = piData.getPi().substring(2, 5);
+  String displayMessage = 'First $numberOfDecimal decimal digits of pi';
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +36,7 @@ class _MyAppBodyState extends State<MyAppBody> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
                   child: Text(
-                    'First $numberOfDecimal decimal digits of pi',
+                    displayMessage,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
@@ -91,21 +75,28 @@ class _MyAppBodyState extends State<MyAppBody> {
                       ),
                     ),
                     FlatButton(
-                      child: Icon(
-                        Icons.send,
-                        color: Colors.lightBlue,
-                        size: 60,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          numberOfDecimal = int.parse(piHolder.text);
-                          if (numberOfDecimal > myPI.length) {
-                            onAlertButtonPressed(context);
-                          }
-                          piSubString = myPI.substring(2, 2 + numberOfDecimal);
-                        });
-                      },
-                    ),
+                        child: Icon(
+                          Icons.send,
+                          color: Colors.lightBlue,
+                          size: 60,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            numberOfDecimal = int.parse(piHolder.text);
+
+                            if (numberOfDecimal > piData.getPi().length ||
+                                numberOfDecimal < 0) {
+                              displayMessage = 'Oops ): limit is 160 digits';
+                              onPressedButton(context);
+                            } else {
+                              piSubString = piData
+                                  .getPi()
+                                  .substring(2, 2 + numberOfDecimal);
+                              displayMessage =
+                                  'First $numberOfDecimal decimal digits of pi';
+                            }
+                          });
+                        }),
                   ],
                 ),
               ],
